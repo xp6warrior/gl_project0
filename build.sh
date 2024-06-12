@@ -1,1 +1,0 @@
-g++ src/main.cpp -o project0 glad/glad.o -I/home/oliver/dev/opengl/project0/include -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl
