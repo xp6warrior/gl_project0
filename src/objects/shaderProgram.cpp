@@ -1,6 +1,14 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 #include "shaderProgram.hpp"
+
+ShaderProgram::ShaderProgram(std::string& vert_src, std::string& frag_src) {
+    addShader(GL_VERTEX_SHADER, vert_src);
+    addShader(GL_FRAGMENT_SHADER, frag_src);
+    createProgram();
+}
 
 void ShaderProgram::addShader(GLenum type, std::string& src) {
     // Compile

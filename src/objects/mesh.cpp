@@ -1,6 +1,9 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "mesh.hpp"
 
-Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) {
+Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) : m_shader(shaderProgram), m_element_count(indi_len) {
     // Create buffers
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers(1, &m_EBO);
@@ -8,22 +11,16 @@ Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsign
     // Bind VAO
     glBindVertexArray(m_VAO);
     // Set up VAO properties (VBO, EBO, attributes)
-    // VBO
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO); // VBO
     glBufferData(GL_ARRAY_BUFFER, vert_len, vertices, GL_STATIC_DRAW);
-    // EBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO); // EBO
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indi_len, indices, GL_STATIC_DRAW);
-    // Attributes
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0); // Attributes
     glEnableVertexAttribArray(0);
-
-    m_shader = shaderProgram;
-    m_vert_count = vert_len/(3*sizeof(float));
 }
 
-unsigned int Mesh::getVertCount() {
-    return m_vert_count;
+unsigned int Mesh::getElementCount() {
+    return m_element_count;
 }
 
 unsigned int Mesh::getVAO() {

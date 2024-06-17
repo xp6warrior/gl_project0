@@ -1,59 +1,46 @@
-#include <iostream>
 #include <cmath>
 
 #include "objects/renderer.hpp"
+#include "objects/shaderProgram.hpp"
 #include "objects/shaderParser.hpp"
-
-float vertices[] = {
-     0.5f,  0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
-    -0.5f,  0.5f, 0.0f,
-     0.5f,  0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f
-};
-unsigned int indices[] = {
-    0, 1, 3,
-    1, 2, 3
-};
-
-float vert2[] = {
-    0.25f, 0.25f, 0.0f,
-    0.25f, 0.0f, 0.0f,
-    0.0f, 0.0f, 0.0f
-};
-unsigned int indi2[] = {
-    0, 1, 2
-};
-
+#include "shapes/triangle.hpp"
+#include "shapes/quad.hpp"
 
 Renderer renderer;
-ShaderProgram shadeProg1;
-ShaderProgram shadeProg2;
+ShaderProgram shader;
+ShaderProgram shader2;
+ShaderProgram colorShader;
 
 void Start() {
-    std::string vert_src = shaderParser("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\src\\shaders\\vertex.glsl");
-    std::string frag_src = shaderParser("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\src\\shaders\\fragment.glsl");
-    std::string frag_src2 = shaderParser("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\src\\shaders\\fragment2.glsl");
+    std::string vert_src = shaderParser("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\res\\shaders\\vertex.glsl");
+    std::string frag_src = shaderParser("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\res\\shaders\\fragment.glsl");
+    std::string frag_src2 = shaderParser("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\res\\shaders\\fragment2.glsl");
 
-    shadeProg1.addShader(GL_VERTEX_SHADER, vert_src);
-    shadeProg1.addShader(GL_FRAGMENT_SHADER, frag_src);
-    shadeProg1.createProgram();
+    shader.addShader(GL_VERTEX_SHADER, vert_src);
+    shader.addShader(GL_FRAGMENT_SHADER, frag_src);
+    shader.createProgram();
 
-    shadeProg2.addShader(GL_VERTEX_SHADER, vert_src);
-    shadeProg2.addShader(GL_FRAGMENT_SHADER, frag_src2);
-    shadeProg2.createProgram();
+    shader2.addShader(GL_VERTEX_SHADER, vert_src);
+    shader2.addShader(GL_FRAGMENT_SHADER, frag_src);
+    shader2.createProgram();
 
-    Mesh quad(vertices, sizeof(vertices), indices, sizeof(indices), shadeProg1);
-    Mesh tri(vert2, sizeof(vert2), indi2, sizeof(indi2), shadeProg2);
+    colorShader.addShader(GL_VERTEX_SHADER, vert_src);
+    colorShader.addShader(GL_FRAGMENT_SHADER, frag_src2);
+    colorShader.createProgram();
+
+    Quad quad(0.0f, 0.0f, colorShader);
+    Triangle tri(0.6f, 0.0f, shader);
+    Triangle tri2(-0.6f, 0.0f, shader2);
 
     renderer.addMesh(quad);
     renderer.addMesh(tri);
+    renderer.addMesh(tri2);
 }
 
 void Update() {
     float time = glfwGetTime();
     float value = (std::sin(time) / 2.0f) + 0.5f;
-    shadeProg1.updateUniform("color", 1.0f, std::sin(time) / 2.0f + 0.5f, 0.0f);
+    colorShader.updateUniform("color", std::sin(time) / 2.0f + 0.5f, 0.0f, -std::sin(time) / 2.0f + 0.5f);
+
     renderer.render();
 }
