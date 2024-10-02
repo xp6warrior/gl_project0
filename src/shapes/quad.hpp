@@ -1,8 +1,9 @@
+#pragma once
 #include "../objects/shaderProgram.hpp"
 #include "../objects/mesh.hpp"
 
 class Quad : public Mesh {
-private:
+protected:
     inline static float m_verts[12] = {
          0.25f,  0.25f, 0.0f,
          0.25f, -0.25f, 0.0f,
@@ -15,7 +16,8 @@ private:
     };
 
 public:
-    Quad(float xPos, float yPos, ShaderProgram shaderProgram) : Mesh(m_verts, sizeof(m_verts), m_indices, sizeof(m_indices), shaderProgram) {
+    Quad(float xPos, float yPos, float scale, ShaderProgram shaderProgram) : Mesh(m_verts, sizeof(m_verts), m_indices, sizeof(m_indices), shaderProgram) {
+        shaderProgram.updateUniform("scale", scale);
         shaderProgram.updateUniform("offset", xPos, yPos, 0.0f);
     }
 };

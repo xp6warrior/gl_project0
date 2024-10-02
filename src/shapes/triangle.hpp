@@ -1,3 +1,4 @@
+#pragma once
 #include "../objects/shaderProgram.hpp"
 #include "../objects/mesh.hpp"
 

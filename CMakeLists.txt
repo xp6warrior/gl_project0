@@ -10,6 +10,8 @@ add_executable(
     src/objects/renderer.cpp
     src/objects/mesh.cpp
     src/objects/shaderProgram.cpp
+    src/objects/texture2D.cpp
 )
 
 target_link_libraries(main PRIVATE glfw glad)
+target_include_directories(main PRIVATE dependencies/stb-image)

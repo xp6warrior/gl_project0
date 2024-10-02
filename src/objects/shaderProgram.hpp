@@ -15,5 +15,6 @@ public:
     void addShader(GLenum type, std::string& src);
     void createProgram();
     unsigned int getProgram();
+    void updateUniform(std::string name, float f);
     void updateUniform(std::string name, float f1, float f2, float f3);
 };

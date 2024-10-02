@@ -3,7 +3,7 @@
 
 #include "mesh.hpp"
 
-Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) : m_shader(shaderProgram), m_element_count(indi_len) {
+Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) : m_shader(shaderProgram) {
     // Create buffers
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers(1, &m_EBO);
@@ -15,12 +15,22 @@ Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsign
     glBufferData(GL_ARRAY_BUFFER, vert_len, vertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO); // EBO
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indi_len, indices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0); // Attributes
-    glEnableVertexAttribArray(0);
 }
 
-unsigned int Mesh::getElementCount() {
-    return m_element_count;
+void Mesh::addAttribute(int index, int size, int stride, int offset) {
+    glBindVertexArray(m_VAO);                                                                                       // 1. Bind VAO
+    glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)(offset*sizeof(float)));    // 2. Add an attribute pointer
+    glEnableVertexAttribArray(index);                                                                               // 3. Enable the arribute
+}
+
+void Mesh::addTexture(unsigned int index, Texture2D texture) {
+    m_textures[index] = texture;                                                                                // 1. Add texture to textures array (based on index)
+    glUseProgram(m_shader.getProgram());
+    glUniform1i(glGetUniformLocation(m_shader.getProgram(), ("tex" + std::to_string(index)).c_str()), index);   // 3. Set texture sampler uniform
+}
+
+Texture2D* Mesh::getTextures() {
+    return m_textures;
 }
 
 unsigned int Mesh::getVAO() {

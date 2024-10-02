@@ -12,8 +12,7 @@ ShaderProgram::ShaderProgram(std::string& vert_src, std::string& frag_src) {
 
 void ShaderProgram::addShader(GLenum type, std::string& src) {
     // Compile
-    unsigned int shader;
-    shader = glCreateShader(type);
+    unsigned int shader = glCreateShader(type);
     const char* c_src = src.c_str();
     glShaderSource(shader, 1, &c_src, NULL);
     glCompileShader(shader);
@@ -60,6 +59,12 @@ void ShaderProgram::createProgram() {
 
 unsigned int ShaderProgram::getProgram() {
     return m_program;
+}
+
+void ShaderProgram::updateUniform(std::string name, float f) {
+    unsigned int uniformLoc = glGetUniformLocation(m_program, name.c_str());
+    glUseProgram(m_program);
+    glUniform1f(uniformLoc, f);
 }
 
 void ShaderProgram::updateUniform(std::string name, float f1, float f2, float f3) {
