@@ -17,4 +17,5 @@ public:
     unsigned int getProgram();
     void updateUniform(std::string name, float f);
     void updateUniform(std::string name, float f1, float f2, float f3);
+    void updateUniform(std::string name, float *matrix);
 };

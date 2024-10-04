@@ -1,15 +1,22 @@
-#include <cmath>
 #include <iostream>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "objects/renderer.hpp"
 #include "objects/shaderProgram.hpp"
-#include "objects/shaderParser.hpp"
+#include "io/shaderParser.hpp"
 #include "objects/texture2D.hpp"
 #include "shapes/triangle.hpp"
 #include "shapes/quad.hpp"
 
 Renderer renderer;
 ShaderProgram shader;
+
+glm::mat4 local(1.0f);
+glm::mat4 view(1.0f);
+glm::mat4 projection(1.0f);
 
 void Start() {
     //!-- Loading assets --!//
@@ -19,8 +26,8 @@ void Start() {
 
     // Textures
     Texture2D texture1, texture2;
-    texture1.loadTexture("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\src\\container.jpg", GL_RGB);
-    texture2.loadTexture("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\src\\awesomeface.png", GL_RGBA);
+    texture1.loadTexture("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\res\\textures\\container.jpg", GL_RGB);
+    texture2.loadTexture("C:\\Users\\Oliver\\Desktop\\Programing Portfolio\\Source Code\\OpenGL\\gl_project0\\res\\textures\\awesomeface.png", GL_RGBA);
 
     //!-- Compile shaders --!//
     shader.addShader(GL_VERTEX_SHADER, vert_src);
@@ -54,17 +61,25 @@ void Start() {
     mesh.addTexture(1, texture2);
 
 
-    //!-- Renderer --!//
+    //!-- Rendering --!//
+    // Transformations
+    local = glm::rotate(local, glm::radians(-65.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    shader.updateUniform("local", glm::value_ptr(local));
+
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+    shader.updateUniform("view", glm::value_ptr(view));
+
+    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    shader.updateUniform("projection", glm::value_ptr(projection));
+
+    // Add to renderer
     renderer.addMesh(mesh);
 }
 
 void Update() {
     // Animation steps
-    float time = glfwGetTime();
-    float radius = 0.5f;
-    shader.updateUniform("offset", std::sin(time)*radius, std::cos(time)*radius, 0.0f);
-    shader.updateUniform("scale", std::abs(std::sin(time)) + 0.5f);
-    shader.updateUniform("time", time);
+    local = glm::rotate(local, glm::radians(-0.60f), glm::vec3(0.0f, 0.0f, 1.0f));
+    shader.updateUniform("local", glm::value_ptr(local));
 
     // Render frame
     renderer.render();

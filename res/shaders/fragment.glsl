@@ -2,13 +2,23 @@
 
 in vec3 color;
 in vec2 texCoord;
+in vec3 pos;
 
 out vec4 FragColor;
 
 uniform sampler2D tex0;
 uniform sampler2D tex1;
-uniform float time = 0.0f;
+
+vec3 fernel(float steepness) {
+    float dist = sqrt(pow(0.5-texCoord.x, 2) + pow(0.5-texCoord.y, 2));
+    float b = (1-steepness*0.5f)/sqrt(0.5f);
+    float quad = steepness*pow(dist, 2) + b*dist;
+    return vec3(clamp(quad, 0.0f, 1.0f));
+}
 
 void main() {
-    FragColor = mix(texture(tex0, texCoord) * vec4(color, 1.0f), texture(tex1, texCoord + vec2(0.0f, time/2)), 0.2);
+    FragColor = mix(texture(tex0, texCoord) * vec4(color, 1.0f), texture(tex1, texCoord), 0.2);
+
+    //vec3 glow = vec3(0.678f, 0.847f, 0.902f) * fernel(4.0f);
+    //FragColor = mix(texture(tex0, texCoord), vec4(glow, 1.0f), 0.4);
 }

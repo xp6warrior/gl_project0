@@ -72,3 +72,9 @@ void ShaderProgram::updateUniform(std::string name, float f1, float f2, float f3
     glUseProgram(m_program);
     glUniform3f(uniformLoc, f1, f2, f3);
 }
+
+void ShaderProgram::updateUniform(std::string name, float *matrix) {
+    unsigned int uniformLoc = glGetUniformLocation(m_program, name.c_str());
+    glUseProgram(m_program);
+    glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, matrix);
+}
