@@ -1,17 +1,15 @@
+#include "texture.hpp"
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
-
-#include "texture2D.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Texture2D::Texture2D() {
+Texture::Texture() {
     stbi_set_flip_vertically_on_load(true);
 }
 
-int Texture2D::loadTexture(std::string path, int format) {
+int Texture::loadTexture(std::string path, int format) {
     m_data = stbi_load(path.c_str(), &m_width, &m_height, &m_nrChannels, 0);                            // Load image data
     if (m_data) {
         glGenTextures(1, &m_texture);                                                                   // Generate a texture buffer
@@ -26,6 +24,6 @@ int Texture2D::loadTexture(std::string path, int format) {
     }
 }
 
-unsigned int Texture2D::getTexture() {
+unsigned int Texture::getTexture() {
     return m_texture;
 }

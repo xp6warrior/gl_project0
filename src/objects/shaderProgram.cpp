@@ -1,16 +1,14 @@
+#include "shaderProgram.hpp"
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "shaderProgram.hpp"
-
-ShaderProgram::ShaderProgram(std::string& vert_src, std::string& frag_src) {
+ShaderProgram::ShaderProgram(std::string vert_src, std::string frag_src) {
     addShader(GL_VERTEX_SHADER, vert_src);
     addShader(GL_FRAGMENT_SHADER, frag_src);
     createProgram();
 }
 
-void ShaderProgram::addShader(GLenum type, std::string& src) {
+void ShaderProgram::addShader(unsigned int type, std::string src) {
     // Compile
     unsigned int shader = glCreateShader(type);
     const char* c_src = src.c_str();
@@ -73,7 +71,7 @@ void ShaderProgram::updateUniform(std::string name, float f1, float f2, float f3
     glUniform3f(uniformLoc, f1, f2, f3);
 }
 
-void ShaderProgram::updateUniform(std::string name, float *matrix) {
+void ShaderProgram::updateUniform(std::string name, const float *matrix) {
     unsigned int uniformLoc = glGetUniformLocation(m_program, name.c_str());
     glUseProgram(m_program);
     glUniformMatrix4fv(uniformLoc, 1, GL_FALSE, matrix);

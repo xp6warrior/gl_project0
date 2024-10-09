@@ -1,9 +1,7 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 #include "mesh.hpp"
+#include <glad/glad.h>
 
-Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) : m_shader(shaderProgram) {
+Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) : m_shader(shaderProgram), m_numOfIndicies(indi_len / sizeof(unsigned int)) {
     // Create buffers
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers(1, &m_EBO);
@@ -23,13 +21,13 @@ void Mesh::addAttribute(int index, int size, int stride, int offset) {
     glEnableVertexAttribArray(index);                                                                               // 3. Enable the arribute
 }
 
-void Mesh::addTexture(unsigned int index, Texture2D texture) {
+void Mesh::addTexture(unsigned int index, Texture texture) {
     m_textures[index] = texture;                                                                                // 1. Add texture to textures array (based on index)
     glUseProgram(m_shader.getProgram());
     glUniform1i(glGetUniformLocation(m_shader.getProgram(), ("tex" + std::to_string(index)).c_str()), index);   // 3. Set texture sampler uniform
 }
 
-Texture2D* Mesh::getTextures() {
+Texture* Mesh::getTextures() {
     return m_textures;
 }
 
@@ -37,6 +35,10 @@ unsigned int Mesh::getVAO() {
     return m_VAO;
 }
 
-unsigned int Mesh::getShader() {
-    return m_shader.getProgram();
+ShaderProgram Mesh::getShader() {
+    return m_shader;
+}
+
+unsigned int Mesh::getNumOfIndicies() {
+    return m_numOfIndicies;
 }

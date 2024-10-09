@@ -2,8 +2,22 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
 void Start();
 void Update();
+void End();
+
+void getKeyInput(int key, int action);
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    getKeyInput(key, action);
+}
+
+void getCursorInput(double xpos, double ypos);
+void cursorCallback(GLFWwindow* window, double xpos, double ypos) {
+    getCursorInput(xpos, ypos);
+}
 
 int main()
 {
@@ -17,7 +31,7 @@ int main()
     #endif
 
     // Window object
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -32,10 +46,16 @@ int main()
     }    
 
     // Viewport (and callback for resizing)
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height){
         glViewport(0, 0, width, height);
     });
+    glEnable(GL_DEPTH_TEST);
+
+    // Input callback functions
+    glfwSetKeyCallback(window, keyCallback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
+    glfwSetCursorPosCallback(window, cursorCallback);
 
     Start();
 
@@ -45,7 +65,7 @@ int main()
             glfwSetWindowShouldClose(window, true); // Close on ESC
         }
     
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         Update();
@@ -55,5 +75,7 @@ int main()
     }
 
     glfwTerminate();
+    End();
+
     return 0;
 }

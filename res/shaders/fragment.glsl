@@ -17,8 +17,10 @@ vec3 fernel(float steepness) {
 }
 
 void main() {
-    FragColor = mix(texture(tex0, texCoord) * vec4(color, 1.0f), texture(tex1, texCoord), 0.2);
-
+    //FragColor = mix(texture(tex0, texCoord), texture(tex1, texCoord), 0.2);
     //vec3 glow = vec3(0.678f, 0.847f, 0.902f) * fernel(4.0f);
     //FragColor = mix(texture(tex0, texCoord), vec4(glow, 1.0f), 0.4);
+    //FragColor = mix(vec4(pos, 1.0f), vec4(glow, 1.0f), 0.4);
+
+    FragColor = texture(tex0, texCoord);
 }

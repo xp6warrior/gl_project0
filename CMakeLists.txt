@@ -7,7 +7,10 @@ add_executable(${PROJECT_NAME}
 	src/objects/renderer.cpp
 	src/objects/mesh.cpp
 	src/objects/shaderProgram.cpp
-	src/objects/texture2D.cpp
+	src/objects/texture.cpp
+	src/objects/camera.cpp
+	src/primitives/cube.cpp
+	src/primitives/quad.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC dependencies/stb-image)
 
