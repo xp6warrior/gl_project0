@@ -1,9 +1,8 @@
-#include "cube.hpp"
+#include <Primitives/cube.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 Cube::Cube(ShaderProgram shader) : Mesh(cubeVerts, sizeof cubeVerts, cubeIndi, sizeof cubeIndi, shader) {
-    m_shader = shader;
     m_model = glm::mat4(1.0f);
     this->addAttribute(0, 3, 5, 0);
     this->addAttribute(2, 2, 5, 3);

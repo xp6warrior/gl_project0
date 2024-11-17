@@ -1,0 +1,18 @@
+1. Finalise camera methods
+    ++ setLookPosition to modify m_yaw and m_pitch
+    ++ float instead of vec3 arguements
+    - more local axis methods?
+    - normalise the camOffset vector
+
+2. Finalise functionality of renderer and camera
+    - renderer contains view and projection matrix, camera simply modifies them
+    - renderer can work without camera -> requires some default view matrix
+
+3. Figure out constructors for all objects
+    - give more options (default, some parameters, all parameters...)
+
+4. Polish up shader programs
+    - every object needs its own instance of a shaderProgram (EACH WITH DIFFERENT PROGRAM ID)
+    - shared resources for copies of the same object
+    - look into materials (how other engines do it)
+    - better input structure

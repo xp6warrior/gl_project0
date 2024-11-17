@@ -1,4 +1,4 @@
-#include "mesh.hpp"
+#include <Objects/mesh.hpp>>
 #include <glad/glad.h>
 
 Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) : m_shader(shaderProgram), m_numOfIndicies(indi_len / sizeof(unsigned int)) {
