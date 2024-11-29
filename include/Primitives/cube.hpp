@@ -5,8 +5,7 @@
 
 class Cube : public Mesh {
 private:
-    glm::mat4 m_model;
-
+    //glm::mat4 m_model;
     inline static float cubeVerts[40] = {
         // Verticies            // Texture Coords
         -0.5f,  0.5f, 0.5f,     0.0f, 1.0f,
@@ -37,8 +36,8 @@ private:
 public:
     Cube() = default;
     Cube(ShaderProgram shader);
-    void translate(float x, float y, float z);
-    void rotate(float x_axis, float y_axis, float z_axis);
-    void scale(float factor);
-    void scale(float x, float y, float z);
+    //void translate(float x, float y, float z);
+    //void rotate(float x_axis, float y_axis, float z_axis);
+    //void scale(float factor);
+    //void scale(float x, float y, float z);
 };

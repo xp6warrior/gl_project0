@@ -88,10 +88,6 @@ void Camera::rotate(float yaw, float pitch) { // local axis
     m_viewMatrix = glm::lookAt(m_position, m_position + m_front, m_up);
 }
 
-vec3 Camera::getPosition() {
-    return m_position;
-}
-
 mat4 Camera::getViewMatrix() {
     return m_viewMatrix;
 }

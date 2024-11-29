@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5.0)
 project(gl_project0)
 set(CMAKE_CXX_STANDARD 17)
 
+# Source files
 add_library(${PROJECT_NAME} STATIC
 	src/gl_project0.cpp
 	src/objects/renderer.cpp
@@ -12,12 +13,17 @@ add_library(${PROJECT_NAME} STATIC
 	src/primitives/cube.cpp
 	src/primitives/quad.cpp
 )
+# Include directories
 target_include_directories(${PROJECT_NAME} PUBLIC
-	dependencies/stb-image
 	include
+	dependencies/stb-image
 )
 
+# Dependencies
 add_subdirectory(dependencies/glfw)
 add_subdirectory(dependencies/glad)
 add_subdirectory(dependencies/glm)
-target_link_libraries(${PROJECT_NAME} glfw glad glm)
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad glm) # Make this PRIVATE one day (details in TODO)
+
+# Test
+add_subdirectory(test)

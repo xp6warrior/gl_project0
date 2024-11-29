@@ -7,7 +7,7 @@ Cube::Cube(ShaderProgram shader) : Mesh(cubeVerts, sizeof cubeVerts, cubeIndi, s
     this->addAttribute(0, 3, 5, 0);
     this->addAttribute(2, 2, 5, 3);
 }
-
+/*
 void Cube::translate(float x, float y, float z) {
     m_model = glm::translate(m_model, glm::vec3(x, y, z));
     m_shader.updateUniform("local", glm::value_ptr(m_model));
@@ -27,4 +27,4 @@ void Cube::scale(float factor) {
 void Cube::scale(float x, float y, float z) {
     m_model = glm::scale(m_model, glm::vec3(x, y, z));
     m_shader.updateUniform("local", glm::value_ptr(m_model));
-}
+}*/

@@ -6,7 +6,7 @@
 #include "Objects/shaderProgram.hpp"
 #include "Objects/texture.hpp"
 #include "Primitives/cube.hpp"
-#include <Primitives/quad.hpp>
+#include "Primitives/quad.hpp"
 
 namespace gl0 {
     void Start();

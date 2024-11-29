@@ -1,8 +1,6 @@
-1. Finalise camera methods
-    ++ setLookPosition to modify m_yaw and m_pitch
-    ++ float instead of vec3 arguements
-    - more local axis methods?
-    - normalise the camOffset vector
+1. Remove dependency libraries from header files
+    - think of alternatives for glm in headers
+    - change from PUBLIC to PRIVATE in CMakeLists.txt
 
 2. Finalise functionality of renderer and camera
     - renderer contains view and projection matrix, camera simply modifies them

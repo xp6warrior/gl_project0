@@ -9,7 +9,7 @@ Quad::Quad(ShaderProgram shader) : Mesh(m_verts, sizeof(m_verts), m_indices, siz
     this->addAttribute(2, 2, 5, 3);
 }
 
-void Quad::translate(float x, float y, float z) {
+/*void Quad::translate(float x, float y, float z) {
     m_model = glm::translate(m_model, glm::vec3(x, y, z));
     m_shader.updateUniform("local", glm::value_ptr(m_model));
 }
@@ -28,4 +28,4 @@ void Quad::scale(float factor) {
 void Quad::scale(float x, float y, float z) {
     m_model = glm::scale(m_model, glm::vec3(x, y, z));
     m_shader.updateUniform("local", glm::value_ptr(m_model));
-}
+}*/
