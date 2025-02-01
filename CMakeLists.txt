@@ -7,23 +7,20 @@ add_library(${PROJECT_NAME} STATIC
 	src/gl_project0.cpp
 	src/objects/renderer.cpp
 	src/objects/mesh.cpp
-	src/objects/shaderProgram.cpp
+	src/objects/shader.cpp
 	src/objects/texture.cpp
 	src/objects/camera.cpp
+	src/objects/material.cpp
 	src/primitives/cube.cpp
 	src/primitives/quad.cpp
 )
 # Include directories
-target_include_directories(${PROJECT_NAME} PUBLIC
-	include
-	dependencies/stb-image
-)
+target_include_directories(${PROJECT_NAME} PRIVATE include)
 
 # Dependencies
 add_subdirectory(dependencies/glfw)
 add_subdirectory(dependencies/glad)
-add_subdirectory(dependencies/glm)
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad glm) # Make this PRIVATE one day (details in TODO)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad)
 
 # Test
 add_subdirectory(test)

@@ -6,15 +6,15 @@
 As the name suggests, this project is my first try at OpenGL. It is simply the result of my learning, starting off as a playground for testing, eventually becoming a simply library that can be utilized in my future projects.
 
 ## Adding to your project (CMake)
-To add gl_project0 to your project simply add a subdirectory to your project's CMakeLists.txt file. Then, specify the include directory of gl_project0, and link the library.
+To add gl_project0 to your project simply place it in your project directory. Then, add a subdirectory to your project's CMakeLists.txt file. Also, specify the include directory of gl_project0, and link the library.
 
 ```cmake
 # Add subdirectory
-add_subdirectory([path_to_library_dir])
+add_subdirectory(<path_to_library_dir>)
 # Specify include directory
-target_include_directories([your_project_name] PUBLIC [path_to_include_dir])
+target_include_directories(<project_name> PUBLIC <path_to_library_dir>/include)
 # Link library with project
-target_link_libraries([your_project_name] gl_project0)
+target_link_libraries(<project_name> gl_project0)
 ```
 
 ## Initial setup

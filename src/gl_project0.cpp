@@ -1,8 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-
-#include <gl_project0.hpp>
+#include <gl0/gl_project0.hpp>
 
 namespace gl0 {
     void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -13,7 +12,7 @@ namespace gl0 {
         getCursorInput(xpos, ypos);
     }
 
-    int Init(std::string title, int width, int height)
+    int Init(std::string title, int width, int height, bool show_fps)
     {
         // Init
         glfwInit();
@@ -55,6 +54,8 @@ namespace gl0 {
 
         // Render loop
         while(!glfwWindowShouldClose(window)) {
+            double before = glfwGetTime();
+
             if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
                 glfwSetWindowShouldClose(window, true); // Close on ESC
             }
@@ -66,6 +67,11 @@ namespace gl0 {
 
             glfwPollEvents(); // input changes
             glfwSwapBuffers(window); // swaps front and back buffers
+
+            auto after = glfwGetTime();
+            if (show_fps) {
+                std::cout << 1000 / (after - before) << std::endl;
+            }
         }
 
         glfwTerminate();

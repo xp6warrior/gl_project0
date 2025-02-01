@@ -1,34 +1,42 @@
-#include <Objects/renderer.hpp>
-#include <Objects/texture.hpp>
+#include <gl0/Objects/renderer.hpp>
+#include <gl0/Objects/texture.hpp>
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <array>
+#include <iostream>
 
-Renderer::Renderer(Mesh** meshes, unsigned int numOfMeshes) : m_meshes(meshes), m_numOfMeshs(numOfMeshes) {
-    m_projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-};
+Renderer::Renderer(Mesh** meshes, unsigned int num_of_meshes) {
+    m_meshes = meshes;
+    m_num_of_meshs = num_of_meshes;
+}
 
-void Renderer::addCamera(Camera& camera) {
+void Renderer::setCamera(Camera& camera) {
     m_camera = &camera;
 }
 
 void Renderer::render() {
-    for (int i=0; i<m_numOfMeshs; i++) {
+    for (unsigned int i=0; i<m_num_of_meshs; i++) {
+        // Loops through all meshes
         Mesh* m = m_meshes[i];
+        Material mat = m->getMaterial();
         
-        Texture* textures = m->getTextures(); // 2. Configures texture samplers
-        for (int i=0; i<16; i++) {
-            if (textures+i == nullptr) continue;
+        // Configures texture sampler (by setting state of all textures)
+        std::array<unsigned int, 16> textures = mat.getTextureIDs();
+        for (auto i=0; i<textures.size(); i++) {
+            if (textures[i] == 0) continue;
             glActiveTexture(GL_TEXTURE0 + i);
-            glBindTexture(GL_TEXTURE_2D, textures[i].getTexture());
+            glBindTexture(GL_TEXTURE_2D, textures[i]);
         }
 
-        //glUseProgram(m.getShader().getProgram()); // 1. Enable shaderProgram is in updateUniform method
-        m->getShader().updateUniform("view", glm::value_ptr(m_camera->getViewMatrix()));
-        m->getShader().updateUniform("projection", glm::value_ptr(m_projection));
-        glBindVertexArray(m->getVAO()); // 2. Bind VAO
-        glDrawElements(GL_TRIANGLES, m->getNumOfIndicies(), GL_UNSIGNED_INT, 0); // 3. Draw
+        // Binds shader and updates uniforms (such as view and projection matricies)
+        unsigned int shader_id = mat.getShaderID();
+        glUseProgram(shader_id);
+        glUniformMatrix4fv(glGetUniformLocation(shader_id, "local"), 1, GL_FALSE, glm::value_ptr(m->getLocalMatrix())); // Converts local coords to global coords
+        glUniformMatrix4fv(glGetUniformLocation(shader_id, "view"), 1, GL_FALSE, glm::value_ptr(m_camera->getViewMatrix())); // Converts global coords to relative camera coords
+        glUniformMatrix4fv(glGetUniformLocation(shader_id, "projection"), 1, GL_FALSE, glm::value_ptr(m_camera->getProjMatrix())); // Converts relative camera coords to normalize screen space coords
+        
+        // Binds VAO and draws mesh
+        glBindVertexArray(m->getVAO());
+        glDrawElements(GL_TRIANGLES, m->getNumOfIndicies(), GL_UNSIGNED_INT, 0);
     }
 }
-
-// View matrix converts global coords to relative camera coords
-// Projection matrix converts relative camera coords to normalize screen space coords

@@ -1,7 +1,10 @@
-#include <Objects/mesh.hpp>
+#include <gl0/Objects/mesh.hpp>
 #include <glad/glad.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
-Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, ShaderProgram shaderProgram) : m_shader(shaderProgram), m_numOfIndicies(indi_len / sizeof(unsigned int)) {
+Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsigned int indi_len, const Material& material) : m_material(material), m_num_of_indicies(indi_len / sizeof(unsigned int)) {
     // Create buffers
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers(1, &m_EBO);
@@ -15,52 +18,39 @@ Mesh::Mesh(float* vertices, unsigned int vert_len, unsigned int* indices, unsign
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indi_len, indices, GL_STATIC_DRAW);
 }
 
-void Mesh::addAttribute(int index, int size, int stride, int offset) {
+int Mesh::addAttribute(int index, int size, int stride, int offset) {
+    if (m_VAO == 0) {
+        std::cout << "ERROR: Can't add attribute to mesh without a defined VAO\n";
+        return -1;
+    }
     glBindVertexArray(m_VAO);                                                                                       // 1. Bind VAO
     glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride*sizeof(float), (void*)(offset*sizeof(float)));    // 2. Add an attribute pointer
     glEnableVertexAttribArray(index);                                                                               // 3. Enable the arribute
+    return 0;
 }
 
-void Mesh::addTexture(unsigned int index, Texture texture) {
-    m_textures[index] = texture;                                                                                // 1. Add texture to textures array (based on index)
-    glUseProgram(m_shader.getProgram());
-    glUniform1i(glGetUniformLocation(m_shader.getProgram(), ("tex" + std::to_string(index)).c_str()), index);   // 3. Set texture sampler uniform
-}
+unsigned int Mesh::getVAO() { return m_VAO; }
 
-Texture* Mesh::getTextures() {
-    return m_textures;
-}
+unsigned int Mesh::getNumOfIndicies() { return m_num_of_indicies; }
 
-unsigned int Mesh::getVAO() {
-    return m_VAO;
-}
+Material Mesh::getMaterial() { return m_material; }
 
-ShaderProgram Mesh::getShader() {
-    return m_shader;
-}
-
-unsigned int Mesh::getNumOfIndicies() {
-    return m_numOfIndicies;
-}
+glm::mat4 Mesh::getLocalMatrix() { return m_model; }
 
 
 void Mesh::translate(float x, float y, float z) {
     m_model = glm::translate(m_model, glm::vec3(x, y, z));
-    m_shader.updateUniform("local", glm::value_ptr(m_model));
 }
 
 void Mesh::rotate(float x_axis, float y_axis, float z_axis) {
     m_model = glm::rotate(m_model, glm::radians(x_axis), glm::vec3(1.0f, 0.0f, 0.0f));
     m_model = glm::rotate(m_model, glm::radians(y_axis), glm::vec3(0.0f, 1.0f, 0.0f));
     m_model = glm::rotate(m_model, glm::radians(z_axis), glm::vec3(0.0f, 0.0f, 1.0f));
-    m_shader.updateUniform("local", glm::value_ptr(m_model));
 }
 
 void Mesh::scale(float factor) {
     m_model = glm::scale(m_model, glm::vec3(factor, factor, factor));
-    m_shader.updateUniform("local", glm::value_ptr(m_model));
 }
 void Mesh::scale(float x, float y, float z) {
     m_model = glm::scale(m_model, glm::vec3(x, y, z));
-    m_shader.updateUniform("local", glm::value_ptr(m_model));
 }
