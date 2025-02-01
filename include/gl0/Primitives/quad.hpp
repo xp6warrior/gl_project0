@@ -5,13 +5,13 @@
 
 class Quad : public Mesh {
 private:
-    inline static float quad_verts[20] = {
+    inline static float quad_verts[] = {
          0.5f,  0.5f, 0.0f,     1.0f, 1.0f,
          0.5f, -0.5f, 0.0f,     1.0f, 0.0f,
         -0.5f, -0.5f, 0.0f,     0.0f, 0.0f,
         -0.5f,  0.5f, 0.0f,     0.0f, 1.0f
     };
-    inline static unsigned int quad_indices[6] = {
+    inline static unsigned int quad_indices[] = {
         0, 1, 3,
         1, 2, 3
     };

@@ -43,7 +43,11 @@ namespace gl0 {
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int w, int h){
             glViewport(0, 0, w, h);
         });
+
+        // OpenGL settings
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 
         // Input callback functions
         glfwSetKeyCallback(window, keyCallback);

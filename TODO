@@ -1,5 +1,8 @@
-3. UI
+- Lighting
 
-4. Lighting
-
-5. Picture in picture ????
+- Writing my own matrix math (i don't like glm)
+- Prettier UI (if I think of something)
+- Importing models
+- Basic physics (gravity, collisions)
+- Better paths to files
+- Picture in picture ????

@@ -10,8 +10,8 @@ private:
 
 public:
     Renderer() = default;
-    Renderer(Mesh** meshes, unsigned int num_of_meshes);
+    Renderer(Mesh** meshes, unsigned int num_of_meshes, Camera* camera);
 
-    void setCamera(Camera& camera);
+    void setCamera(Camera* camera);
     void render();
 };

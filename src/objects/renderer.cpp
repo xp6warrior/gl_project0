@@ -5,13 +5,14 @@
 #include <array>
 #include <iostream>
 
-Renderer::Renderer(Mesh** meshes, unsigned int num_of_meshes) {
+Renderer::Renderer(Mesh** meshes, unsigned int num_of_meshes, Camera* camera) {
     m_meshes = meshes;
     m_num_of_meshs = num_of_meshes;
+    m_camera = camera;
 }
 
-void Renderer::setCamera(Camera& camera) {
-    m_camera = &camera;
+void Renderer::setCamera(Camera* camera) {
+    m_camera = camera;
 }
 
 void Renderer::render() {
@@ -32,8 +33,13 @@ void Renderer::render() {
         unsigned int shader_id = mat.getShaderID();
         glUseProgram(shader_id);
         glUniformMatrix4fv(glGetUniformLocation(shader_id, "local"), 1, GL_FALSE, glm::value_ptr(m->getLocalMatrix())); // Converts local coords to global coords
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "view"), 1, GL_FALSE, glm::value_ptr(m_camera->getViewMatrix())); // Converts global coords to relative camera coords
-        glUniformMatrix4fv(glGetUniformLocation(shader_id, "projection"), 1, GL_FALSE, glm::value_ptr(m_camera->getProjMatrix())); // Converts relative camera coords to normalize screen space coords
+        if (m_camera != nullptr) {
+            glUniformMatrix4fv(glGetUniformLocation(shader_id, "view"), 1, GL_FALSE, glm::value_ptr(m_camera->getViewMatrix())); // Converts global coords to relative camera coords
+            glUniformMatrix4fv(glGetUniformLocation(shader_id, "projection"), 1, GL_FALSE, glm::value_ptr(m_camera->getProjMatrix())); // Converts relative camera coords to normalize screen space coords
+        } else {
+            glUniformMatrix4fv(glGetUniformLocation(shader_id, "view"), 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+            glUniformMatrix4fv(glGetUniformLocation(shader_id, "projection"), 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+        }
         
         // Binds VAO and draws mesh
         glBindVertexArray(m->getVAO());
